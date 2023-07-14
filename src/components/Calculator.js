@@ -1,10 +1,35 @@
 import React, { useState } from 'react';
-
+import { useEffect } from 'react';
 const Calculator = () => {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [bmi, setBmi] = useState('');
   const [weightCategory, setWeightCategory] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Load BMI data from local storage on initial component mount
+  useEffect(() => {
+    const storedWeight = localStorage.getItem('weight');
+    const storedHeight = localStorage.getItem('height');
+    const storedBmi = localStorage.getItem('bmi');
+    const storedWeightCategory = localStorage.getItem('weightCategory');
+
+    if (storedWeight && storedHeight && storedBmi && storedWeightCategory) {
+      setWeight(storedWeight);
+      setHeight(storedHeight);
+      setBmi(storedBmi);
+      setWeightCategory(storedWeightCategory);
+    }
+  }, []);
+
+  
+  // Save BMI data to local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('weight', weight);
+    localStorage.setItem('height', height);
+    localStorage.setItem('bmi', bmi);
+    localStorage.setItem('weightCategory', weightCategory);
+  }, [weight, height, bmi, weightCategory]);
 
   const calculateBMI = () => {
     // Convert weight and height to numbers
@@ -16,6 +41,12 @@ const Calculator = () => {
       // Handle invalid input
       setBmi('Invalid input');
       setWeightCategory('');
+      return;
+    }
+
+    // Check if weight and height are positive numbers
+    if (weightNum < 0 || heightNum < 0) {
+      setErrorMessage('Weight and height cannot be negative');
       return;
     }
 
@@ -37,15 +68,17 @@ const Calculator = () => {
       category = 'Obese';
     }
 
-    // Update the state with the calculated BMI and weight category
+    // Update the state with the calculated BMI, weight category, and clear the error message
     setBmi(bmiValue.toFixed(2)); // Round to 2 decimal places
     setWeightCategory(category);
+    setErrorMessage('');
   };
 
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-96 h-96 p-4 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4">BMI Calculator</h2>
+        <h2 className="text-3xl font-bold mb-4">BMI Calculator</h2>
+        <br></br>
         <div className="flex flex-col space-y-4">
           <input
             type="number"
@@ -67,6 +100,9 @@ const Calculator = () => {
           >
             Calculate
           </button>
+          {errorMessage && (
+            <div className="text-red-500">{errorMessage}</div>
+          )}
           {bmi && (
             <div className="border border-gray-300 rounded-md p-2">
               <strong>BMI:</strong> {bmi}
