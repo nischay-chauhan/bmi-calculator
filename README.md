@@ -20,7 +20,7 @@ A simple BMI (Body Mass Index) Calculator built with React. This calculator allo
 - HTML: Markup language for the calculator's structure.
 - CSS: Styling for the calculator's appearance.
 
-##USAGE
+## USAGE
 - Enter your weight in kilograms (kg) in the weight input field.-
 - Enter your height in centimeters (cm) in the height input field.
 - Click the "Calculate" button to calculate your BMI.
