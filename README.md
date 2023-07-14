@@ -2,7 +2,7 @@
 
 A simple BMI (Body Mass Index) Calculator built with React. This calculator allows users to input their weight and height and calculates their BMI value and weight category.
 
-![BMI Calculator Screenshot](./screenshot.png)
+
 
 ## Features
 
